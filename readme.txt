@@ -3,7 +3,7 @@ Contributors: metaphorcreations
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5SY9RRTQQ4ABN
 Tags: custom post type, members, team, team members, member info, info
 Requires at least: 3.2
-Tested up to: 4.2.2
+Tested up to: 4.2
 Stable tag: /trunk/
 License: GPL2
 
@@ -59,9 +59,6 @@ Documentation is coming soon!
 1. Coming soon.
 
 == Changelog ==
-
-= 1.1.7 =
-* Fixed errors in Widget overrides
 
 = 1.1.6 =
 * Fixed add_query_arg() and remove_query_arg() usage
@@ -139,4 +136,4 @@ Documentation is coming soon!
 
 == Upgrade Notice ==
 
-Fixed errors in Widget overrides.
+Fixed add_query_arg() and remove_query_arg() usage.
