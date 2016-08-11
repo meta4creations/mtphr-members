@@ -7,6 +7,9 @@
 */
 
 jQuery( document ).ready( function($) {
+	
+	var $button = $('.mtphr-shortcodes-modal-submit'); 
+	
 
 	/* --------------------------------------------------------- */
 	/* !Helper functions - 1.1.0 */
@@ -30,12 +33,12 @@ jQuery( document ).ready( function($) {
 	
 
 	/* --------------------------------------------------------- */
-	/* !Shortcode generator initialize - 1.1.0 */
+	/* !Shortcode generator initialize - 1.1.8 */
 	/* --------------------------------------------------------- */
 
 	$('body').on('mtphr_shortcode_generator_init', function() {
 
-		var $container = jQuery('.mtphr-shortcode-gen-container'),
+		var $container = jQuery('.mtphr-shortcode-gen'),
 				shortcode = $container.children('input.shortcode').val();
 
 		switch( shortcode ) {
@@ -63,7 +66,7 @@ jQuery( document ).ready( function($) {
 
 	$('body').on('mtphr_shortcode_generator_value', function() {
 
-		var $container = jQuery('.mtphr-shortcode-gen-container'),
+		var $container = jQuery('.mtphr-shortcode-gen'),
 				shortcode = $container.children('input.shortcode').val();
 
 		switch( shortcode ) {
@@ -93,8 +96,41 @@ jQuery( document ).ready( function($) {
 
 	function mtphr_shortcode_generate_mtphr_member_archive_init( $container ) {
 
-		var $button = $('.mtphr-shortcode-gen-insert-button');
-		$button.show();
+		var $taxonomy = $container.find('select[name="taxonomy"]'),
+				$tax = $container.find('.mtphr-shortcode-gen-taxonomy'),
+				$tax_fields = $container.find('.mtphr-shortcode-gen-taxonomy-fields').hide(),
+				$terms = $container.find('.mtphr-shortcode-gen-terms');
+				
+				
+		// Taxonomy change
+		$taxonomy.live('change', function() {
+		
+			if( $(this).val() == '' ) {
+				$tax_fields.hide();
+			} else {
+			
+				var data = {
+					action: 'mtphr_shortcode_gen_tax_change',
+					taxonomy: $(this).val(),
+					security: mtphr_shortcodes_generator_vars.security
+				};
+				jQuery.post( ajaxurl, data, function( response ) {
+					$terms.html(response);
+				});
+				$tax_fields.show();
+			}
+		});
+		
+		// Trigger the sorting
+		$('.mtphr-shortcode-gen-rearranger').sortable( {
+			items: '.mtphr-ui-multi-check'
+		});	
+		
+		setTimeout(function() {
+			$button.removeAttr('disabled');
+		}, 1000);
+	
+		$button.removeAttr('disabled');
 	}
 
 	/* --------------------------------------------------------- */
@@ -111,22 +147,51 @@ jQuery( document ).ready( function($) {
 				att_excerpt_length = $container.find('input[name="excerpt_length"]').val(),
 				att_excerpt_more = $container.find('input[name="excerpt_more"]').val(),
 				att_more_link = $container.find('input[name="more_link"]').is(':checked'),
-				att_categories = $container.find('input[name="categories"]').val(),
-				att_assets = $container.find('input[name="assets"]').val(),
+				att_taxonomy = $container.find('select[name="taxonomy"]').val(),
+				$terms = $container.find('.mtphr-shortcode-gen-term-select'),
+				att_operator = $container.find('select[name="operator"]').val(),
+				$assets = $container.find('.mtphr-shortcode-gen-assets'),
 				value = '[mtphr_members_archive';
 
 		if( att_more_link && att_excerpt_more != '' ) {
 			att_excerpt_more = '{'+att_excerpt_more+'}';
 		}
 
-		if( att_posts_per_page != '' && att_posts_per_page != 9 ) { value += ' posts_per_page="'+parseInt(att_posts_per_page)+'"'; }
+		if( att_posts_per_page != '' && att_posts_per_page != 6 ) { value += ' posts_per_page="'+parseInt(att_posts_per_page)+'"'; }
 		if( att_columns != '' && att_columns != 3 ) { value += ' columns="'+parseInt(att_columns)+'"'; }
 		if( att_orderby != 'menu_order' ) { value += ' orderby="'+att_orderby+'"'; }
 		if( att_order != 'DESC' ) { value += ' order="'+att_order+'"'; }
-		if( att_excerpt_length != '' && att_excerpt_length != 140 ) { value += ' excerpt_length="'+parseInt(att_excerpt_length)+'"'; }
+		if( att_excerpt_length != '' ) { value += ' excerpt_length="'+att_excerpt_length+'"'; }
 		if( att_excerpt_more != '' ) { value += ' excerpt_more="'+att_excerpt_more+'"'; }
-		if( att_categories != '' ) { value += ' categories="'+att_categories+'"'; }
-		if( att_assets != '' && att_assets != 'thumbnail,name,social,title,excerpt' ) { value += ' assets="'+att_assets+'"'; }
+			
+		if( att_taxonomy == 'mtphr_member_category' ) {
+
+			// Create the term list	
+			var term_list = ''
+			$terms.each( function( index ) {
+				if( $(this).is(':checked') ) {
+					term_list += $(this).val()+',';
+				}
+			});
+			term_list = term_list.substr(0, term_list.length-1);
+		
+			if( att_taxonomy == 'mtphr_member_category' ) { value += ' categories="'+term_list+'"'; }
+			if( att_operator != 'IN' ) { value += ' operator="'+att_operator+'"'; }
+		}
+		
+		if( $assets.length > 0 ) {
+			
+			// Create the term list	
+			var asset_list = ''
+			$assets.each( function( index ) {
+				if( $(this).is(':checked') ) {
+					asset_list += $(this).val()+',';
+				}
+			});
+			asset_list = asset_list.substr(0, asset_list.length-1);
+			if( asset_list != '' && asset_list != 'thumbnail,name,info,social,title,excerpt' ) { value += ' assets="'+asset_list+'"'; }
+		}
+		
 		value += ']';
 
 		$insert.val( value );

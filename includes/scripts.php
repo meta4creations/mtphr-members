@@ -1,7 +1,7 @@
 <?php
 
 /* --------------------------------------------------------- */
-/* !Load the admin scripts - 1.1.0 */
+/* !Load the admin scripts - 1.1.9 */
 /* --------------------------------------------------------- */
 
 function mtphr_members_admin_scripts( $hook ) {
@@ -38,10 +38,10 @@ function mtphr_members_admin_scripts( $hook ) {
 	wp_enqueue_style( 'mtphr-members-admin' );
 	
 	// Shortcode generator
-	wp_register_script( 'mtphr-members-sc-gen', MTPHR_MEMBERS_URL.'/assets/js/mtphr-members-sc-gen.js', array('jquery'), MTPHR_MEMBERS_VERSION, true );
+	wp_register_script( 'mtphr-members-sc-gen', MTPHR_MEMBERS_URL.'/assets/js/admin/generator.js', array('jquery'), MTPHR_MEMBERS_VERSION, true );
 	wp_enqueue_script( 'mtphr-members-sc-gen' );
 }
-add_action( 'admin_enqueue_scripts', 'mtphr_members_admin_scripts' );
+add_action( 'admin_enqueue_scripts', 'mtphr_members_admin_scripts', 11 );
 
 
 

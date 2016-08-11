@@ -3,7 +3,7 @@ Contributors: metaphorcreations
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5SY9RRTQQ4ABN
 Tags: custom post type, members, team, team members, member info, info
 Requires at least: 3.2
-Tested up to: 4.3
+Tested up to: 4.6
 Stable tag: /trunk/
 License: GPL2
 
@@ -59,6 +59,14 @@ Documentation is coming soon!
 1. Coming soon.
 
 == Changelog ==
+
+= 1.1.9 =
+* File organization
+* Bug fix in metabox scripts
+* STILL WORKING ON THIS - Bug fix for shortcode generator
+
+= 1.1.8 =
+* Updated shortcode generator scripts
 
 = 1.1.7 =
 * Fixed errors in Widget overrides
@@ -139,4 +147,4 @@ Documentation is coming soon!
 
 == Upgrade Notice ==
 
-Fixed errors in Widget overrides.
+File organization & bug fix in metabox scripts

@@ -53,7 +53,11 @@ function mtphr_member_settings_render_metabox() {
 	$social_override = get_post_meta( $post->ID, '_mtphr_members_social_override', true );
 	$twitter_override = get_post_meta( $post->ID, '_mtphr_members_twitter_override', true );
 	
-	
+	// Make sure these are arrays
+	$contact_override = is_array($contact_override) ? $contact_override : array();
+	$social_override = is_array($social_override) ? $social_override : array();
+	$twitter_override = is_array($twitter_override) ? $twitter_override : array();
+		
 	// Add and filter the tabs
 	$tabs = array(
 		'info' => sprintf(__('%s Info', 'mtphr-members'), $settings['singular_label']),
